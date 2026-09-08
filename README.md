@@ -104,7 +104,6 @@ The ESP32 will be used to generate known digital signals and UART/SPI/I2C traffi
 └── docs/       # Design documentation
 ```
 
-## Current Status
 
 ## Current Progress
 
