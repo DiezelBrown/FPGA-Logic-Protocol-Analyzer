@@ -19,7 +19,7 @@ module input_sampler_tb;
         #10 signal_in = 8'b00001111; // Set signal_in to 8'b00001111 at time 28ns
         #20 $finish;
     end
-    
+
     initial begin
         $dumpfile("input_sampler.vcd");
         $dumpvars(0, input_sampler_tb);
