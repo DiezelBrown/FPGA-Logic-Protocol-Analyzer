@@ -1,8 +1,8 @@
 module input_sampler (
     
     input clk,
-    input signal_in,
-    output reg sampled_signal
+    input [7:0] signal_in,
+    output reg [7:0] sampled_signal
 );
 
 always @(posedge clk) begin

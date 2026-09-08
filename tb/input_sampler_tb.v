@@ -1,8 +1,8 @@
 module input_sampler_tb;
 
     reg clk;
-    reg signal_in;
-    wire sampled_signal;
+    reg [7:0] signal_in;
+    wire [7:0] sampled_signal;
     input_sampler uut(
         .clk(clk),
         .signal_in(signal_in),
@@ -10,12 +10,13 @@ module input_sampler_tb;
     );
     initial begin
         clk = 0;
-        signal_in = 0;
+        signal_in = 8'b00000000;
     end
     
     initial begin
-        #8 signal_in = 1; // Set signal_in to 1 at time 8ns
-        #10 signal_in = 0;
+        #8 signal_in = 8'b10101010; // Set signal_in to 8'b10101010 at time 8ns
+        #10 signal_in = 8'b11001100; // Set signal_in to 8'b11001100 at time 18ns
+        #10 signal_in = 8'b00001111; // Set signal_in to 8'b00001111 at time 28ns
         #20 $finish;
     end
     
