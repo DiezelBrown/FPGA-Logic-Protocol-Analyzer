@@ -106,6 +106,12 @@ The ESP32 will be used to generate known digital signals and UART/SPI/I2C traffi
 
 ## Current Status
 
-The project is currently in the **design and architecture phase**. The next step is implementing and verifying the multi-channel signal acquisition system.
+## Current Progress
 
-As development continues, this README will be updated with simulation results, hardware captures, measured sampling performance, FPGA resource utilization, and protocol-decoding examples.
+### 8-Channel Input Sampling
+
+The input sampler now captures all 8 digital channels simultaneously on each rising edge of the sampling clock.
+
+![8-Channel Sampler Simulation](images/8_channel_sampler_simulation.png)
+
+The simulation verifies that changes on the input bus are only captured on the next rising edge of the 100 MHz sampling clock.
