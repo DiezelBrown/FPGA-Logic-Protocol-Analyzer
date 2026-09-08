@@ -62,14 +62,12 @@ Final specifications will be based on hardware testing and timing results.
 
 ## Hardware
 
-**FPGA:** Digilent Basys 3
-**Device:** Xilinx Artix-7 XC7A35T
-**System Clock:** 100 MHz
+**Development Board:** Digilent Basys 3  
+**FPGA:** Xilinx Artix-7 XC7A35T  
+**System Clock:** 100 MHz  
 **Test Device:** ESP32
 
 The ESP32 will be used to generate known digital signals and UART/SPI/I2C traffic for hardware testing.
-
-## Development Roadmap
 
 * [x] Define project architecture
 * [x] Select FPGA development board
