@@ -1,0 +1,5 @@
+# Simulation output
+*.vcd
+
+# Compiled Icarus Verilog simulations
+sim/*_sim
