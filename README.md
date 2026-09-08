@@ -73,7 +73,7 @@ The ESP32 will be used to generate known digital signals and UART/SPI/I2C traffi
 
 * [x] Define project architecture
 * [x] Select FPGA development board
-* [ ] 8-channel input sampler
+* [x] 8-channel input sampler
 * [ ] Configurable sampling
 * [ ] BRAM capture buffer
 * [ ] Trigger engine
