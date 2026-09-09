@@ -72,7 +72,7 @@ The ESP32 will be used to generate known digital signals and UART/SPI/I2C traffi
 * [x] Define project architecture
 * [x] Select FPGA development board
 * [x] 8-channel input sampler
-* [ ] Configurable sampling
+* [x] Configurable sampling
 * [ ] BRAM capture buffer
 * [ ] Trigger engine
 * [ ] Capture-control FSM
@@ -105,10 +105,12 @@ The ESP32 will be used to generate known digital signals and UART/SPI/I2C traffi
 
 ## Current Progress
 
-### 8-Channel Input Sampling
+### Configurable 8-Channel Input Sampling
 
-The input sampler now captures all 8 digital channels simultaneously on each rising edge of the sampling clock.
+The input sampler captures all 8 digital channels simultaneously at a configurable sampling rate.
 
-![8-Channel Sampler Simulation](images/8_channel_sampler_simulation.png)
+Supported sampling rates include 100, 50, 25, 10, 5, and 1 MS/s. A sampling controller generates a `sample_enable` signal that determines when the input channels are captured.
 
-The simulation verifies that changes on the input bus are only captured on the next rising edge of the 100 MHz sampling clock.
+![Configurable Sampling Simulation](images/configurable_sampling_simulation.png)
+
+The simulation below uses a 25 MS/s sampling rate with a 100 MHz system clock. The sampler captures the 8-bit input only when `sample_enable` is asserted, demonstrating that input changes between sampling events are not captured.
