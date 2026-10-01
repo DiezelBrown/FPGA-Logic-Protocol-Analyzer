@@ -26,14 +26,37 @@ module logic_analyzer_top_tb;
 
     always #5 clk = ~clk;
 
-    initial begin
-        #25 signal_in = 8'b10101010;
-        #10 signal_in = 8'b11110000;
-        #10 signal_in = 8'b00001111;
-        #10 signal_in = 8'b11001100;
-        #100 $finish;
-    end
+ initial begin
+    #20;
 
+    // Set first value well before a capture
+    @(negedge clk);
+    signal_in = 8'hAA;
+
+    // Wait until first buffer write actually occurs
+    wait(uut.buffer.write_address == 1);
+
+    @(negedge clk);
+    signal_in = 8'hF0;
+    wait(uut.buffer.write_address == 2);
+
+    @(negedge clk);
+    signal_in = 8'h0F;
+    wait(uut.buffer.write_address == 3);
+
+    @(negedge clk);
+    signal_in = 8'hCC;
+    wait(uut.buffer.write_address == 4);
+
+    #1;
+
+    $display("buffer[0] = %h", uut.buffer.buffer[0]);
+    $display("buffer[1] = %h", uut.buffer.buffer[1]);
+    $display("buffer[2] = %h", uut.buffer.buffer[2]);
+    $display("buffer[3] = %h", uut.buffer.buffer[3]);
+
+    $finish;
+end
     initial begin
         $dumpfile("logic_analyzer_top.vcd");
         $dumpvars(0, logic_analyzer_top_tb);

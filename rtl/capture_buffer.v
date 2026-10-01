@@ -1,6 +1,6 @@
 module capture_buffer(
     input clk,
-    input[7:0] sampled_signal,
+    input[7:0] sampled_data,
     input capture_enable,
     input rst
 );
@@ -12,7 +12,7 @@ always @(posedge clk) begin
         write_address <= 0;
     end 
     else if (capture_enable) begin
-        buffer[write_address] <= sampled_signal;
+        buffer[write_address] <= sampled_data;
         write_address <= write_address + 1;
     end
 end
