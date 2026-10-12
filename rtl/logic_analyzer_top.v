@@ -4,7 +4,9 @@ module logic_analyzer_top
     input rst,
     input [7:0] signal_in,
     input [2:0] sample_rate, // 3-bit input to select sample rate
-    output [7:0] sampled_signal
+    output [7:0] sampled_signal,
+    input [16:0] read_address,
+    output [7:0] read_data
 );
     //Pulses for one clock cycle whenever a sample should be captured
     wire sample_enable;
@@ -28,6 +30,8 @@ module logic_analyzer_top
         .clk(clk),
         .rst(rst),
         .capture_enable(sample_enable),
-        .sampled_data(signal_in)
+        .sampled_data(signal_in),
+        .read_address(read_address),
+        .read_data(read_data)
     );
 endmodule

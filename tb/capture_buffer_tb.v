@@ -3,14 +3,18 @@ module capture_buffer_tb;
     reg clk;
     reg rst;
     reg capture_enable;
-    reg [7:0] sampled_signal;
+    reg [7:0] sampled_data;
+    reg [16:0] read_address;
+    wire [7:0] read_data;
 
     // Instantiate the capture buffer
     capture_buffer uut (
         .clk(clk),
         .rst(rst),
         .capture_enable(capture_enable),
-        .sampled_signal(sampled_signal)
+        .sampled_data(sampled_data),
+        .read_address(read_address),
+        .read_data(read_data)
     );
 
     // Generate 100 MHz clock
@@ -18,36 +22,69 @@ module capture_buffer_tb;
 
     // Test sequence
     initial begin
-        clk = 0;
-        rst = 1;
-        capture_enable = 0;
-        sampled_signal = 8'h00;
+    // Initialize signals
+    clk = 0;
+    rst = 1;
+    capture_enable = 0;
+    sampled_data = 8'h00;
+    read_address = 17'd0;
 
-        // Reset
-        #20;
-        rst = 0;
+    // Reset the write address
+    #20;
+    rst = 0;
 
-        // Begin capturing
-        capture_enable = 1;
+    // Begin capturing samples
+    capture_enable = 1;
 
-        #10 sampled_signal = 8'hAA;
-        #10 sampled_signal = 8'hF0;
-        #10 sampled_signal = 8'h0F;
-        #10 sampled_signal = 8'hCC;
+    // Write AA
+    sampled_data = 8'hAA;
+    @(posedge clk);
+    #1;
 
-        // Stop capturing
-        #10 capture_enable = 0;
+    // Write F0
+    sampled_data = 8'hF0;
+    @(posedge clk);
+    #1;
 
-        #20;
+    // Write 0F
+    sampled_data = 8'h0F;
+    @(posedge clk);
+    #1;
 
-        $display("buffer[0] = %h", uut.buffer[0]);
-        $display("buffer[1] = %h", uut.buffer[1]);
-        $display("buffer[2] = %h", uut.buffer[2]);
-        $display("buffer[3] = %h", uut.buffer[3]);
-        $display("buffer[4] = %h", uut.buffer[4]);
+    // Write CC
+    sampled_data = 8'hCC;
+    @(posedge clk);
+    #1;
 
-        $finish;
-    end
+    // Stop writing to the buffer
+    capture_enable = 0;
+
+    // Read address 0
+    read_address = 17'd0;
+    @(posedge clk);
+    #1;
+    $display("read_address 0 = %h", read_data);
+
+    // Read address 1
+    read_address = 17'd1;
+    @(posedge clk);
+    #1;
+    $display("read_address 1 = %h", read_data);
+
+    // Read address 2
+    read_address = 17'd2;
+    @(posedge clk);
+    #1;
+    $display("read_address 2 = %h", read_data);
+
+    // Read address 3
+    read_address = 17'd3;
+    @(posedge clk);
+    #1;
+    $display("read_address 3 = %h", read_data);
+
+    $finish;
+end
 
     // Generate waveform file
     initial begin

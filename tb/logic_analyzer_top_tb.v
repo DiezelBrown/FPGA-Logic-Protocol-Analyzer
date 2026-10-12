@@ -4,7 +4,9 @@ module logic_analyzer_top_tb;
     reg rst;
     reg [2:0] sample_rate;
     reg [7:0] signal_in;
-
+    reg [16:0] read_address;
+    
+    wire [7:0] read_data;
     wire [7:0] sampled_signal;
 
     logic_analyzer_top uut (
@@ -12,7 +14,9 @@ module logic_analyzer_top_tb;
         .rst(rst),
         .sample_rate(sample_rate),
         .signal_in(signal_in),
-        .sampled_signal(sampled_signal)
+        .sampled_signal(sampled_signal),
+        .read_address(read_address),
+        .read_data(read_data)
     );
 
     initial begin
@@ -20,6 +24,7 @@ module logic_analyzer_top_tb;
         rst = 1;
         sample_rate = 3'b010; // 25 MS/s
         signal_in = 8'b00000000;
+        read_address = 17'd0;
 
         #20 rst = 0;
     end
@@ -50,10 +55,25 @@ module logic_analyzer_top_tb;
 
     #1;
 
-    $display("buffer[0] = %h", uut.buffer.buffer[0]);
-    $display("buffer[1] = %h", uut.buffer.buffer[1]);
-    $display("buffer[2] = %h", uut.buffer.buffer[2]);
-    $display("buffer[3] = %h", uut.buffer.buffer[3]);
+    read_address = 17'd0;
+    @(posedge clk);
+    #1;
+    $display("read_address 0 = %h", read_data);
+
+    read_address = 17'd1;
+    @(posedge clk);
+    #1;
+    $display("read_address 1 = %h", read_data);
+
+    read_address = 17'd2;
+    @(posedge clk);
+    #1;
+    $display("read_address 2 = %h", read_data);
+
+    read_address = 17'd3;
+    @(posedge clk);
+    #1;
+    $display("read_address 3 = %h", read_data);
 
     $finish;
 end
