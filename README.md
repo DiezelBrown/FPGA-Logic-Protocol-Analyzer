@@ -74,7 +74,7 @@ The ESP32 will be used to generate known digital signals and UART/SPI/I2C traffi
 * [x] 8-channel input sampler
 * [x] Configurable sampling
 * [x] BRAM capture buffer
-* [ ] Trigger engine
+* [x] Trigger engine
 * [ ] Capture-control FSM
 * [ ] Basys 3 hardware testing
 * [ ] FPGA-to-PC communication
