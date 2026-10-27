@@ -1,17 +1,23 @@
-module capture_buffer(
+module capture_buffer (
     input clk,
     input [7:0] sampled_data,
     input capture_enable,
     input rst,
     input [16:0] read_address,
-    output reg [7:0] read_data
+
+    output reg [7:0] read_data,
+    output wire [16:0] current_write_address
 );
 
-    // 17-bit write address supports 131,072 memory locations
+    // Address of the next sample to be written into BRAM
+    // 17 bits allow 131,072 addresses (0 through 131071)
     reg [16:0] write_address;
 
     // 128K x 8-bit capture memory
     reg [7:0] buffer [0:131071];
+
+    // Expose the next write address to the capture controller
+    assign current_write_address = write_address;
 
     // Write samples into the capture buffer
     always @(posedge clk) begin
@@ -24,7 +30,7 @@ module capture_buffer(
         end
     end
 
-    // Read stored samples from the capture buffer
+    // Synchronous read: output updates on a rising clock edge
     always @(posedge clk) begin
         read_data <= buffer[read_address];
     end
