@@ -9,7 +9,8 @@ module trigger_engine (
     input trigger_mode,
     input [7:0] trigger_pattern,
     input [7:0] trigger_mask,
-    output reg trigger_detected
+    output reg trigger_detected,
+    output wire trigger_hit
 );
 
     reg [7:0] previous_signal;
@@ -32,6 +33,12 @@ module trigger_engine (
 
     assign pattern_match =
     ((signal_in ^ trigger_pattern) & trigger_mask) == 8'b0;
+
+    assign trigger_hit = sample_enable &&
+    (trigger_mode
+        ? pattern_match
+        : (previous_valid &&
+           (trigger_edge ? falling_edge : rising_edge)));
 
     always @(posedge clk) begin
         if (rst) begin

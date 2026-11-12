@@ -22,6 +22,10 @@ module logic_analyzer_integration_tb;
     // Capture configuration
     reg start_capture = 0;
     reg [16:0] pre_trigger_count = 17'd4;
+    reg start_offload = 0;
+    wire uart_tx_pin;
+    wire offload_busy;
+    wire offload_done;
 
     // Memory read interface
     reg [16:0] read_address = 0;
@@ -114,10 +118,11 @@ module logic_analyzer_integration_tb;
             current_write_address
         );
 
-        // Continue capturing after trigger
+        // Continue capturing until the buffer is complete
         $display("TEST 3: Post-trigger capture");
 
-        repeat (10) @(negedge clk);
+        wait (capture_done == 1);
+        @(negedge clk);
 
         $display(
             "State=%b Write_Address=%0d Done=%b",

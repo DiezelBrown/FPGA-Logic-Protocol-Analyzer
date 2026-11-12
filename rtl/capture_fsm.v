@@ -5,11 +5,13 @@ module capture_fsm (
     input sample_enable,
     input trigger_detected,
     input [16:0] pre_trigger_count,
-
+    input [16:0] current_write_address, //ADDRESS OF THE NEXT SAMPLE TO BE WRITTEN INTO BRAM
+    
+    
     output wire capture_enable,
     output reg capture_done,
     output reg [1:0] state,
-    output reg [16:0] trigger_address
+    output reg [16:0] trigger_address // Address of the sample where the trigger was detected
 );
 //four states of our capture controller
     localparam IDLE         = 2'b00;
@@ -35,6 +37,7 @@ module capture_fsm (
             sample_count <= 0;
             post_count <= 0;
             capture_done <= 0;
+            trigger_address <= 17'd0;
         end
         else begin
             // Default outputs LOW unless enabled by the current state
@@ -51,15 +54,25 @@ module capture_fsm (
                 end
 
                 PRE_TRIGGER: begin
-                    if (sample_enable) begin
-                        if (sample_count < pre_trigger_count)
-                            sample_count <= sample_count + 1;
-                    end
 
-                    if (trigger_detected &&
-                        sample_count >= pre_trigger_count) begin
-                        state <= POST_TRIGGER;
+                    // Count samples until sufficient pre-trigger history exists
+                    if (sample_enable && sample_count < pre_trigger_count)
+                        sample_count <= sample_count + 1;
+
+                    // The trigger engine reports the event after the
+                    // triggering sample has already been written.
+                    if (trigger_detected && sample_count >= pre_trigger_count) begin
+
+                        // Current write address points to the NEXT location.
+                        // Subtract one to identify the triggering sample.
+                        trigger_address <= current_write_address - 17'd1;
+
                         post_count <= 0;
+
+                        if (pre_trigger_count == 17'd131071)
+                            state <= DONE;
+                        else
+                            state <= POST_TRIGGER;
                     end
                 end
 
@@ -67,7 +80,7 @@ module capture_fsm (
                     if (sample_enable) begin
                         post_count <= post_count + 1;
 
-                        if (post_count == (18'd131071 - pre_trigger_count))
+                        if (post_count == (18'd131070 - {1'b0, pre_trigger_count}))
                             state <= DONE;
                     end
                 end

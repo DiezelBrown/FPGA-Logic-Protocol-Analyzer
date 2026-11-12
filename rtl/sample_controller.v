@@ -7,7 +7,7 @@ module sample_controller(
 
 reg [7:0] counter;
 reg [7:0] terminal_count;
-always @(*) begin
+always_comb begin
     case (sample_rate)
         3'b000: terminal_count = 8'd0;
         3'b001: terminal_count = 8'd1;

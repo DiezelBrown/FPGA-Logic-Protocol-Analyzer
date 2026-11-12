@@ -16,7 +16,11 @@ module logic_analyzer_top_tb;
         .signal_in(signal_in),
         .sampled_signal(sampled_signal),
         .read_address(read_address),
-        .read_data(read_data)
+        .read_data(read_data),
+        .start_offload(start_offload),
+        .uart_tx_pin(uart_tx_pin),
+        .offload_busy(offload_busy),
+        .offload_done(offload_done)
     );
 
     initial begin
